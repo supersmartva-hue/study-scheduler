@@ -1,0 +1,9 @@
+require('./src/config/env');
+const app = require('./src/app');
+const { PORT } = require('./src/config/env');
+const { startCronJobs } = require('./src/utils/scheduler');
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  startCronJobs();
+});
