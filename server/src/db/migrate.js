@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { pool } = require('../config/database');
 
-async function migrate() {
+async function runMigrations() {
   const migrationsDir = path.join(__dirname, 'migrations');
   const files = fs.readdirSync(migrationsDir).sort();
 
@@ -16,11 +16,15 @@ async function migrate() {
       console.log(`  ✓ ${file}`);
     } catch (err) {
       console.error(`  ✗ ${file}: ${err.message}`);
-      process.exit(1);
+      throw err;
     }
   }
   console.log('Migrations complete.');
-  process.exit(0);
 }
 
-migrate();
+module.exports = { runMigrations };
+
+// Allow running directly: node src/db/migrate.js
+if (require.main === module) {
+  runMigrations().then(() => process.exit(0)).catch(() => process.exit(1));
+}
