@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import BottomNav from './BottomNav';
 
 const PAGE_TITLES = {
   '/dashboard': 'Dashboard',
@@ -71,11 +72,14 @@ export default function AppShell() {
           onMenuClick={() => setMobileOpen(true)}
         />
         <main className="flex-1 overflow-y-auto">
-          <div className="p-4 sm:p-6 pb-8 page-enter">
+          <div className="p-4 sm:p-6 pb-24 lg:pb-8 page-enter">
             <Outlet />
           </div>
         </main>
       </div>
+
+      {/* ── Bottom nav (mobile only) ── */}
+      <BottomNav />
     </div>
   );
 }
