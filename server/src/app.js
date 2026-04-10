@@ -12,11 +12,15 @@ const notificationsRoutes = require('./modules/notifications/notifications.route
 
 const app = express();
 
+const ALLOWED_ORIGINS = [
+  CLIENT_URL,
+  'https://study-scheduler-rho.vercel.app',
+];
+
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (mobile/curl) or any localhost port
     if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) return cb(null, true);
-    if (origin === CLIENT_URL) return cb(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
     cb(new Error('Not allowed by CORS'));
   },
   credentials: true,
