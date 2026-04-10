@@ -215,6 +215,17 @@ body {
   animation: fadeIn 0.2s ease-out;
 }
 
+/* ─── Mobile touch improvements ─────────────────────────── */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* iOS safe area padding */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
+
 /* ─── Recharts tweaks ────────────────────────────────────── */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line { stroke: #e0e7ff !important; }

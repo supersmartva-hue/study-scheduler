@@ -30,7 +30,7 @@ function SubjectForm({ initial, onSave, onCancel }) {
     <form onSubmit={e => { e.preventDefault(); onSave(form); }} className="space-y-5">
       <Input label="Subject Name *" value={form.name} onChange={set('name')} required placeholder="e.g. Advanced Mathematics" />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-sm font-semibold text-slate-700 block mb-1.5">Difficulty</label>
           <div className="grid grid-cols-5 gap-1">
@@ -52,7 +52,7 @@ function SubjectForm({ initial, onSave, onCancel }) {
           value={form.estimatedHours} onChange={setNum('estimatedHours')} required />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input label="Deadline" type="date" value={form.deadline || ''} onChange={set('deadline')} />
         <div>
           <label className="text-sm font-semibold text-slate-700 block mb-1.5">Priority: {form.priority}/5</label>

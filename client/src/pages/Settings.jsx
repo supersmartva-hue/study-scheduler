@@ -107,7 +107,7 @@ export default function Settings() {
         <SectionCard icon={Clock} title="Study Preferences" description="Configure when and how much you study"
           color="#10b981" bg="#ecfdf5">
           <div className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-semibold text-slate-700 block mb-1.5">
                   Study Starts ({to12h(form.study_start_hour)})

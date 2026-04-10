@@ -100,17 +100,17 @@ export default function Schedule() {
   return (
     <div className="space-y-5 max-w-full animate-fade-in">
       {/* Header */}
-      <div className="flex items-start justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-slate-900">Weekly Schedule</h2>
           <p className="text-sm text-slate-400 mt-0.5">
-            {new Date(weekStart).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+            {new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             {' – '}
-            {addDays(new Date(weekStart), 6).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            {totalThisWeek > 0 && ` · ${doneThisWeek}/${totalThisWeek} sessions done`}
+            {addDays(new Date(weekStart), 6).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {totalThisWeek > 0 && ` · ${doneThisWeek}/${totalThisWeek} done`}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1">
             <button onClick={() => setWeekOffset(w => w - 1)}
               className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
@@ -128,7 +128,8 @@ export default function Schedule() {
           <Tooltip text={schedule ? 'Regenerate — creates a fresh AI schedule (replaces current)' : 'Generate — AI builds your personalized weekly study plan'} position="bottom">
             <Button onClick={handleGenerate} loading={generating} size="md">
               <Sparkles size={15} />
-              {schedule ? 'Regenerate' : 'Generate Schedule'}
+              <span className="hidden sm:inline">{schedule ? 'Regenerate' : 'Generate Schedule'}</span>
+              <span className="sm:hidden">{schedule ? 'Regen' : 'Generate'}</span>
             </Button>
           </Tooltip>
         </div>
@@ -176,7 +177,8 @@ export default function Schedule() {
 
       {/* Weekly calendar grid */}
       {schedule && !generating && (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 pb-2">
+        <div className="grid grid-cols-7 gap-2 min-w-[640px]">
           {weekDays.map(({ date, label, dayNum, isToday }) => {
             const daySessions = sessionsByDay(date);
             const done = daySessions.filter(s => s.status === 'completed').length;
@@ -226,6 +228,7 @@ export default function Schedule() {
               </div>
             );
           })}
+        </div>
         </div>
       )}
 

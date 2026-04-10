@@ -1,4 +1,4 @@
-import { Bell, X } from 'lucide-react';
+import { Bell, X, Menu } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { getUnreadCount, getNotifications, markAllRead } from '../../api/users.api';
 import Tooltip from '../common/Tooltip';
@@ -7,7 +7,7 @@ const TYPE_ICONS = {
   reminder: '⏰', missed: '❌', streak: '🔥', achievement: '🏆', system: 'ℹ️',
 };
 
-export default function TopBar({ title, subtitle }) {
+export default function TopBar({ title, subtitle, onMenuClick }) {
   const [unread, setUnread]        = useState(0);
   const [open, setOpen]            = useState(false);
   const [notifications, setNotifs] = useState([]);
@@ -60,12 +60,20 @@ export default function TopBar({ title, subtitle }) {
     <header className="h-16 border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-20 flex-shrink-0"
       style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}>
 
-      {/* Left: page title + subtitle */}
-      <div>
-        <h1 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight">{title}</h1>
-        {subtitle && (
-          <p className="text-[11px] text-slate-400 font-medium leading-none mt-0.5">{subtitle}</p>
-        )}
+      {/* Left: hamburger (mobile) + page title */}
+      <div className="flex items-center gap-3 min-w-0">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors flex-shrink-0"
+        >
+          <Menu size={18} />
+        </button>
+        <div className="min-w-0">
+          <h1 className="text-base font-extrabold text-slate-900 tracking-tight leading-tight truncate">{title}</h1>
+          {subtitle && (
+            <p className="text-[11px] text-slate-400 font-medium leading-none mt-0.5 truncate hidden sm:block">{subtitle}</p>
+          )}
+        </div>
       </div>
 
       {/* Right: date + bell */}
@@ -98,7 +106,7 @@ export default function TopBar({ title, subtitle }) {
 
           {/* Dropdown */}
           {open && (
-            <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl border border-slate-200 z-30 animate-fade-in overflow-hidden"
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-1rem)] bg-white rounded-2xl border border-slate-200 z-30 animate-fade-in overflow-hidden"
               style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">

@@ -71,7 +71,7 @@ export default function AppShell() {
           onMenuClick={() => setMobileOpen(true)}
         />
         <main className="flex-1 overflow-y-auto">
-          <div className="p-4 sm:p-6 page-enter">
+          <div className="p-4 sm:p-6 pb-8 page-enter">
             <Outlet />
           </div>
         </main>

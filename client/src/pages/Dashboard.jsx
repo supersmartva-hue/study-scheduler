@@ -103,7 +103,7 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <div className="relative z-10 flex items-start justify-between flex-wrap gap-4">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <p className="text-indigo-200 text-sm font-medium mb-1">
               {greeting.emoji} {greeting.text}
@@ -120,7 +120,7 @@ export default function Dashboard() {
             </p>
           </div>
           <Link to="/schedule"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-indigo-900 transition-all hover:-translate-y-0.5"
+            className="self-start flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-indigo-900 transition-all hover:-translate-y-0.5 whitespace-nowrap"
             style={{ background: 'rgba(255,255,255,0.95)' }}>
             <Sparkles size={15} />
             {schedule ? 'View Schedule' : 'Generate Schedule'}
@@ -209,8 +209,8 @@ export default function Dashboard() {
           {todaySessions.map(session => {
             const cfg = STATUS_CONFIG[session.status] || STATUS_CONFIG.pending;
             return (
-              <div key={session.id} className="flex items-center gap-4 px-5 py-3.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
-                <div className="w-3 h-3 rounded-full flex-shrink-0 shadow-sm"
+              <div key={session.id} className="flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
+                <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 shadow-sm"
                   style={{ backgroundColor: session.subject_color || '#6366f1' }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-800 truncate">
@@ -220,11 +220,11 @@ export default function Dashboard() {
                     {formatTime(session.start_time)} – {formatTime(session.end_time)} · {session.duration_mins} min
                   </p>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${cfg.bg} ${cfg.text} flex-shrink-0`}>
+                <span className={`text-xs px-2 py-1 rounded-full font-semibold ${cfg.bg} ${cfg.text} flex-shrink-0 hidden sm:inline-flex`}>
                   {cfg.label}
                 </span>
                 {session.status === 'pending' && (
-                  <div className="flex gap-1.5 flex-shrink-0">
+                  <div className="flex gap-1 flex-shrink-0">
                     <Tooltip text="Mark as completed — earn XP & update streak" position="top">
                       <button onClick={() => handleComplete(session.id)}
                         className="w-8 h-8 rounded-xl flex items-center justify-center text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-colors">
