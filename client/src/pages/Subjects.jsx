@@ -27,13 +27,13 @@ function SubjectForm({ initial, onSave, onCancel }) {
   const setNum = k => e => setForm(f => ({ ...f, [k]: Number(e.target.value) }));
 
   return (
-    <form onSubmit={e => { e.preventDefault(); onSave(form); }} className="space-y-5">
+    <form onSubmit={e => { e.preventDefault(); onSave(form); }} className="space-y-4">
       <Input label="Subject Name *" value={form.name} onChange={set('name')} required placeholder="e.g. Advanced Mathematics" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <label className="text-sm font-semibold text-slate-700 block mb-1.5">Difficulty</label>
-          <div className="grid grid-cols-5 gap-1">
+          <div className="grid grid-cols-5 gap-1.5">
             {[1,2,3,4,5].map(n => (
               <button key={n} type="button"
                 onClick={() => setForm(f => ({ ...f, difficulty: n }))}
@@ -52,7 +52,7 @@ function SubjectForm({ initial, onSave, onCancel }) {
           value={form.estimatedHours} onChange={setNum('estimatedHours')} required />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <Input label="Deadline" type="date" value={form.deadline || ''} onChange={set('deadline')} />
         <div>
           <label className="text-sm font-semibold text-slate-700 block mb-1.5">Priority: {form.priority}/5</label>

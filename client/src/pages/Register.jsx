@@ -64,7 +64,7 @@ export default function Register() {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-3xl shadow-glass border border-slate-100 p-8">
+        <div className="bg-white rounded-3xl shadow-glass border border-slate-100 p-5 sm:p-8">
           <div className="lg:hidden flex items-center gap-2 mb-6">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center"
               style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>

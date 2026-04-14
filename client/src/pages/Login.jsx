@@ -87,7 +87,7 @@ export default function Login() {
             <span className="font-bold text-xl text-slate-900">StudyAI</span>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-glass border border-slate-100 p-8">
+          <div className="bg-white rounded-3xl shadow-glass border border-slate-100 p-5 sm:p-8">
             <div className="mb-7">
               <h1 className="text-2xl font-bold text-slate-900">Welcome back 👋</h1>
               <p className="text-slate-500 text-sm mt-1">Sign in to your study dashboard</p>

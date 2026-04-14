@@ -194,7 +194,7 @@ export default function Progress() {
             {subjects.map(s => {
               const pct = s.estimated_hours > 0 ? Math.min(100, (s.hours_completed / s.estimated_hours) * 100) : 0;
               return (
-                <div key={s.id} className="flex items-center gap-4 px-5 py-3.5">
+                <div key={s.id} className="flex items-center gap-2 sm:gap-4 px-3 sm:px-5 py-3.5">
                   <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
                     style={{ background: `linear-gradient(135deg, ${s.color}, ${s.color}bb)` }}>
                     {s.name[0].toUpperCase()}

@@ -31,7 +31,7 @@ export default function Modal({ open, onClose, title, children, size = 'md' }) {
             <X size={16} />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6">{children}</div>
       </div>
     </div>
   );
