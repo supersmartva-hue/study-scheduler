@@ -308,7 +308,7 @@ export default function Schedule() {
             {/* Sessions for selected day */}
             <div className="mt-3">
               {(() => {
-                const { date, isToday } = weekDays[mobileDayIdx] || {};
+                const { date } = weekDays[mobileDayIdx] || {};
                 const daySessions = sessionsByDay(date);
                 if (daySessions.length === 0) return (
                   <div className="text-center py-12 card">
