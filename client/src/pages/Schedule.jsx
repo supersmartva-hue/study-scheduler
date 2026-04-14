@@ -16,9 +16,46 @@ const STATUS_CONFIG = {
   rescheduled: { bg: '#fffbeb', text: '#d97706', label: 'Moved'     },
 };
 
-function SessionBlock({ session, onComplete, onSkip }) {
+function SessionBlock({ session, onComplete, onSkip, fullWidth = false }) {
   const cfg    = STATUS_CONFIG[session.status] || STATUS_CONFIG.pending;
   const canAct = session.status === 'pending';
+
+  if (fullWidth) {
+    return (
+      <div className={`rounded-2xl p-4 border transition-all duration-150 ${canAct ? 'hover:shadow-md' : 'opacity-80'}`}
+        style={{ background: canAct ? '#fff' : '#fafafa', borderColor: canAct ? '#e2e8f0' : '#f1f5f9' }}>
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-10 rounded-full flex-shrink-0"
+            style={{ backgroundColor: session.subject_color || '#6366f1' }} />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-slate-800 truncate">
+              {session.title || session.subject_name}
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+              <Clock size={11} />
+              {formatTime(session.start_time)} – {formatTime(session.end_time)} · {session.duration_mins} min
+            </p>
+          </div>
+          <span className="text-xs px-2.5 py-1 rounded-full font-bold flex-shrink-0"
+            style={{ background: cfg.bg, color: cfg.text }}>
+            {cfg.label}
+          </span>
+        </div>
+        {canAct && (
+          <div className="flex gap-2 mt-3 pt-3 border-t border-slate-100">
+            <button onClick={() => onComplete(session.id)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-colors">
+              <CheckCircle2 size={15} /> Mark Done
+            </button>
+            <button onClick={() => onSkip(session.id)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold text-slate-400 bg-slate-50 hover:bg-slate-100 transition-colors">
+              <XCircle size={15} /> Skip
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={`rounded-xl p-2.5 border transition-all duration-150 ${canAct ? 'hover:shadow-md cursor-default' : 'opacity-80'}`}
@@ -67,9 +104,17 @@ export default function Schedule() {
   const { data: schedule, loading, generating, error } = useSelector(s => s.schedule);
   const subjects = useSelector(s => s.subjects.items);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [mobileDayIdx, setMobileDayIdx] = useState(0);
 
   const weekStart = getMondayOfWeek(addDays(new Date(), weekOffset * 7));
   const weekDays  = getWeekDays(weekStart);
+
+  // Reset mobile day selection to today (or 0) when week changes
+  useEffect(() => {
+    const today = formatDate(new Date());
+    const idx = weekDays.findIndex(d => d.date === today);
+    setMobileDayIdx(idx >= 0 ? idx : 0);
+  }, [weekOffset]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     dispatch(fetchActiveSchedule());
@@ -177,59 +222,114 @@ export default function Schedule() {
 
       {/* Weekly calendar grid */}
       {schedule && !generating && (
-        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 pb-2">
-        <div className="grid grid-cols-7 gap-2 min-w-[640px]">
-          {weekDays.map(({ date, label, dayNum, isToday }) => {
-            const daySessions = sessionsByDay(date);
-            const done = daySessions.filter(s => s.status === 'completed').length;
-            const total = daySessions.length;
+        <>
+          {/* ── Desktop (sm+): 7-column grid ── */}
+          <div className="hidden sm:block overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 pb-2">
+            <div className="grid grid-cols-7 gap-2 min-w-[640px]">
+              {weekDays.map(({ date, label, dayNum, isToday }) => {
+                const daySessions = sessionsByDay(date);
+                const done = daySessions.filter(s => s.status === 'completed').length;
+                const total = daySessions.length;
 
-            return (
-              <div key={date}
-                className={`rounded-2xl border flex flex-col min-h-[280px] overflow-hidden transition-shadow ${
-                  isToday ? 'shadow-brand' : ''
-                }`}
-                style={{
-                  background: isToday ? 'linear-gradient(180deg, #eef2ff 0%, #fff 40%)' : '#fff',
-                  borderColor: isToday ? '#818cf8' : '#e2e8f0',
-                }}>
-                {/* Day header */}
-                <div className={`px-2.5 py-2.5 border-b ${isToday ? 'border-indigo-200' : 'border-slate-50'}`}>
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{label}</div>
-                  <div className={`text-lg font-black leading-none mt-0.5 ${isToday ? 'text-brand-600' : 'text-slate-800'}`}>
-                    {dayNum}
+                return (
+                  <div key={date}
+                    className={`rounded-2xl border flex flex-col min-h-[280px] overflow-hidden transition-shadow ${
+                      isToday ? 'shadow-brand' : ''
+                    }`}
+                    style={{
+                      background: isToday ? 'linear-gradient(180deg, #eef2ff 0%, #fff 40%)' : '#fff',
+                      borderColor: isToday ? '#818cf8' : '#e2e8f0',
+                    }}>
+                    {/* Day header */}
+                    <div className={`px-2.5 py-2.5 border-b ${isToday ? 'border-indigo-200' : 'border-slate-50'}`}>
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{label}</div>
+                      <div className={`text-lg font-black leading-none mt-0.5 ${isToday ? 'text-brand-600' : 'text-slate-800'}`}>
+                        {dayNum}
+                      </div>
+                      {total > 0 && (
+                        <div className="mt-1.5 h-1 rounded-full bg-slate-100 overflow-hidden">
+                          <div className="h-full rounded-full"
+                            style={{
+                              width: `${(done / total) * 100}%`,
+                              background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                              transition: 'width 0.7s ease',
+                            }} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Sessions */}
+                    <div className="flex-1 p-2 space-y-1.5 overflow-y-auto">
+                      {daySessions.length === 0 ? (
+                        <div className="h-full flex items-center justify-center">
+                          <p className="text-[10px] text-slate-300 text-center font-medium">Free day</p>
+                        </div>
+                      ) : (
+                        daySessions.map(s => (
+                          <SessionBlock key={s.id} session={s}
+                            onComplete={handleComplete}
+                            onSkip={id => dispatch(markSkip(id))} />
+                        ))
+                      )}
+                    </div>
                   </div>
-                  {total > 0 && (
-                    <div className="mt-1.5 h-1 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full rounded-full"
-                        style={{
-                          width: `${(done / total) * 100}%`,
-                          background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
-                          transition: 'width 0.7s ease',
-                        }} />
-                    </div>
-                  )}
-                </div>
+                );
+              })}
+            </div>
+          </div>
 
-                {/* Sessions */}
-                <div className="flex-1 p-2 space-y-1.5 overflow-y-auto">
-                  {daySessions.length === 0 ? (
-                    <div className="h-full flex items-center justify-center">
-                      <p className="text-[10px] text-slate-300 text-center font-medium">Free day</p>
-                    </div>
-                  ) : (
-                    daySessions.map(s => (
-                      <SessionBlock key={s.id} session={s}
+          {/* ── Mobile (< sm): single-day view ── */}
+          <div className="sm:hidden">
+            {/* Day tab bar */}
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+              {weekDays.map(({ date, label, dayNum, isToday }, i) => {
+                const daySessions = sessionsByDay(date);
+                const isSelected = mobileDayIdx === i;
+                return (
+                  <button key={date} onClick={() => setMobileDayIdx(i)}
+                    className="flex-shrink-0 flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-150"
+                    style={isSelected
+                      ? { background: 'linear-gradient(135deg, #4f46e5, #7c3aed)', color: '#fff' }
+                      : isToday
+                      ? { background: '#eef2ff', color: '#4f46e5' }
+                      : { background: '#f8fafc', color: '#64748b' }
+                    }>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">{label}</span>
+                    <span className="text-lg font-black leading-none mt-0.5">{dayNum}</span>
+                    {daySessions.length > 0 && (
+                      <div className="w-1.5 h-1.5 rounded-full mt-1"
+                        style={{ background: isSelected ? 'rgba(255,255,255,0.7)' : '#6366f1' }} />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sessions for selected day */}
+            <div className="mt-3">
+              {(() => {
+                const { date, isToday } = weekDays[mobileDayIdx] || {};
+                const daySessions = sessionsByDay(date);
+                if (daySessions.length === 0) return (
+                  <div className="text-center py-12 card">
+                    <p className="text-2xl mb-2">🎉</p>
+                    <p className="text-sm font-semibold text-slate-600">Free day!</p>
+                    <p className="text-xs text-slate-400 mt-1">No sessions scheduled</p>
+                  </div>
+                );
+                return (
+                  <div className="space-y-2.5">
+                    {daySessions.map(s => (
+                      <SessionBlock key={s.id} session={s} fullWidth
                         onComplete={handleComplete}
                         onSkip={id => dispatch(markSkip(id))} />
-                    ))
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </>
       )}
 
       {/* Legend */}

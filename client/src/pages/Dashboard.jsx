@@ -131,9 +131,9 @@ export default function Dashboard() {
         {/* XP progress */}
         {user?.xp_total !== undefined && (
           <div className="relative z-10 mt-4 pt-4 border-t border-white/15">
-            <div className="flex items-center justify-between text-xs text-indigo-200 mb-2">
-              <span className="font-semibold">Level {user.level || 1}</span>
-              <span>{user.xp_total || 0} XP · {Math.pow((user.level || 1), 2) * 100 - ((user.xp_total || 0) % (Math.pow((user.level || 1), 2) * 100))} XP to next level</span>
+            <div className="flex items-center justify-between text-xs text-indigo-200 mb-2 gap-2">
+              <span className="font-semibold flex-shrink-0">Level {user.level || 1}</span>
+              <span className="truncate text-right">{user.xp_total || 0} XP · {Math.pow((user.level || 1), 2) * 100 - ((user.xp_total || 0) % (Math.pow((user.level || 1), 2) * 100))} XP to next</span>
             </div>
             <div className="h-2 rounded-full bg-white/15 overflow-hidden">
               <div className="h-full rounded-full transition-all duration-1000"

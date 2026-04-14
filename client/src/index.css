@@ -221,6 +221,13 @@ button, a, [role="button"] {
   touch-action: manipulation;
 }
 
+/* ─── Hide scrollbar (utility) ───────────────────────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
 /* iOS safe area padding */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }

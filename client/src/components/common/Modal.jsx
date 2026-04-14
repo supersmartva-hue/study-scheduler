@@ -13,12 +13,12 @@ export default function Modal({ open, onClose, title, children, size = 'md' }) {
   const sizes = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', xl: 'max-w-2xl' };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 animate-fade-in">
       <div
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className={`relative bg-white rounded-3xl shadow-glass w-full ${sizes[size]} max-h-[90vh] overflow-y-auto animate-slide-up`}>
+      <div className={`relative bg-white rounded-t-3xl sm:rounded-3xl shadow-glass w-full ${sizes[size]} max-h-[92vh] overflow-y-auto animate-slide-up`}>
         {/* Gradient top bar */}
         <div className="h-1 w-full rounded-t-3xl" style={{ background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4)' }} />
 

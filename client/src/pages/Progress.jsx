@@ -202,7 +202,7 @@ export default function Progress() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-sm font-semibold text-slate-800 truncate">{s.name}</span>
-                      <span className="text-xs font-bold text-slate-500 ml-2 flex-shrink-0">
+                      <span className="text-xs font-bold text-slate-500 ml-2 flex-shrink-0 hidden sm:inline">
                         {Number(s.hours_completed).toFixed(1)} / {s.estimated_hours}h
                       </span>
                     </div>

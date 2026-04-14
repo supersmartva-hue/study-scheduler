@@ -178,7 +178,7 @@ export default function Subjects() {
                     </span>
                   </div>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                   <Tooltip text="Edit subject — update name, hours, deadline & color" position="top">
                     <button onClick={() => { setEditing(subject); setShowForm(true); }}
                       className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors">
